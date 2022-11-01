@@ -7,6 +7,8 @@ use plonky2::plonk::proof::{ProofWithPublicInputs, ProofWithPublicInputsTarget};
 use crate::access_set::AccessSet;
 use crate::signal::{Digest, PlonkyProof, Signal, C, F};
 
+//use itertools::Itertools::zip_eq;
+
 impl AccessSet {
     pub fn aggregate_signals(
         &self,
@@ -85,13 +87,18 @@ impl AccessSet {
         let config = CircuitConfig::standard_recursion_zk_config();
         let mut builder = CircuitBuilder::new(config);
         let mut pw = PartialWitness::new();
-        let n = topics.len();
+        let n1 = topics.len();
+        let n2 = signals.len();
+        assert_eq!(n1, n2);
 
         let mut proof_targets = Vec::new();
         let mut nullifiers = Vec::new();
 
         // todo: how to loop through 2 vectors at the same time and "with ownership"
+        let mut i = 0;
         for (topic, signal) in topics.into_iter().zip(signals.into_iter()) {
+            println!("{}", i);
+            i += 1;
             let public_inputs: Vec<F> = self
                 .0
                 .cap

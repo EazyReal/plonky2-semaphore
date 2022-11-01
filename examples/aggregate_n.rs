@@ -6,6 +6,7 @@
 #![feature(generic_const_exprs)]
 
 use plonky2::field::goldilocks_field::GoldilocksField;
+use plonky2::plonk::circuit_data::VerifierCircuitData;
 use plonky2::plonk::config::PoseidonGoldilocksConfig;
 use plonky2::plonk::proof::Proof;
 
@@ -14,6 +15,7 @@ use plonky2::hash::merkle_tree::MerkleTree;
 use plonky2::hash::poseidon::PoseidonHash;
 use plonky2::plonk::config::Hasher;
 use plonky2_semaphore::access_set::AccessSet;
+//use plonky2_semaphore::recursion::aggregate_n_signals;
 
 use anyhow::Result;
 
@@ -41,9 +43,17 @@ fn main() -> Result<()> {
         .collect();
     let access_set = AccessSet(MerkleTree::new(public_keys, 0));
 
-    let i = 12;
-    let topic = F::rand_arr();
-
-    let (signal, vd) = access_set.make_signal(private_keys[i], topic, i)?;
-    access_set.verify_signal(topic, signal, &vd)
+    let mut topics = Vec::new();
+    let mut signals = Vec::new();
+    let (_, vd) = access_set.make_signal(private_keys[1 << 19], F::rand_arr(), 1 << 19)?;
+    for i in 0..10 {
+        let topic = F::rand_arr();
+        let (signal, _) = access_set.make_signal(private_keys[i], topic, i)?;
+        topics.push(topic);
+        signals.push(signal);
+    }
+    let (_, recursive_proof) = access_set.aggregate_n_signals(topics, signals, &vd);
+    let proof_len = recursive_proof.to_bytes()?.len();
+    println!("{}", proof_len);
+    Ok(())
 }
