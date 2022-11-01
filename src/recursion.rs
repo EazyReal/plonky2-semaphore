@@ -1,7 +1,8 @@
+use plonky2::fri::proof;
 use plonky2::iop::witness::{PartialWitness, Witness};
 use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2::plonk::circuit_data::{CircuitConfig, VerifierCircuitData, VerifierCircuitTarget};
-use plonky2::plonk::proof::ProofWithPublicInputs;
+use plonky2::plonk::proof::{ProofWithPublicInputs, ProofWithPublicInputsTarget};
 
 use crate::access_set::AccessSet;
 use crate::signal::{Digest, PlonkyProof, Signal, C, F};
@@ -73,5 +74,63 @@ impl AccessSet {
         data.verify(recursive_proof.clone()).unwrap();
 
         (signal0.nullifier, signal1.nullifier, recursive_proof.proof)
+    }
+
+    pub fn aggregate_n_signals(
+        &self,
+        topics: Vec<Digest>,
+        signals: Vec<Signal>,
+        verifier_data: &VerifierCircuitData<F, C, 2>,
+    ) -> (Vec<Digest>, ProofWithPublicInputs<F, C, 2>) {
+        let config = CircuitConfig::standard_recursion_zk_config();
+        let mut builder = CircuitBuilder::new(config);
+        let mut pw = PartialWitness::new();
+        let n = topics.len();
+
+        let mut proof_targets = Vec::new();
+        let mut nullifiers = Vec::new();
+
+        for (topic, signal) in topics.iter().zip(signals.iter()) {
+            let public_inputs: Vec<F> = self
+                .0
+                .cap
+                .0
+                .iter()
+                .flat_map(|h| h.elements)
+                .chain(signal.nullifier)
+                .chain(topic)
+                .collect();
+            let proof_target = builder.add_virtual_proof_with_pis(&verifier_data.common);
+            pw.set_proof_with_pis_target(
+                &proof_target,
+                &ProofWithPublicInputs {
+                    proof: signal.proof,
+                    public_inputs: public_inputs,
+                },
+            );
+
+            proof_targets.push(proof_target);
+            nullifiers.push(signal.nullifier);
+        }
+
+        let vd_target = VerifierCircuitTarget {
+            constants_sigmas_cap: builder
+                .add_virtual_cap(verifier_data.common.config.fri_config.cap_height),
+        };
+        pw.set_cap_target(
+            &vd_target.constants_sigmas_cap,
+            &verifier_data.verifier_only.constants_sigmas_cap,
+        );
+
+        for proof_target in proof_targets.iter() {
+            builder.verify_proof(proof_target, &vd_target, &verifier_data.common);
+        }
+
+        let data = builder.build();
+        let recursive_proof = data.prove(pw).unwrap();
+
+        data.verify(recursive_proof.clone()).unwrap();
+
+        (nullifiers, recursive_proof)
     }
 }

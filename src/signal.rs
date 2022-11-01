@@ -44,4 +44,8 @@ mod tests {
         let (signal, vd) = access_set.make_signal(private_keys[i], topic, i)?;
         access_set.verify_signal(topic, signal, &vd)
     }
+
+    fn test_n_recursions() -> Result<()> {
+        OK(())
+    }
 }
