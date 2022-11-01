@@ -97,7 +97,7 @@ impl AccessSet {
         // todo: how to loop through 2 vectors at the same time and "with ownership"
         let mut i = 0;
         for (topic, signal) in topics.into_iter().zip(signals.into_iter()) {
-            println!("{}", i);
+            println!("{}, {:?}", i, topic);
             i += 1;
             let public_inputs: Vec<F> = self
                 .0
