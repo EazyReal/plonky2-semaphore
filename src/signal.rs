@@ -45,7 +45,8 @@ mod tests {
         access_set.verify_signal(topic, signal, &vd)
     }
 
-    fn test_n_recursions() -> Result<()> {
-        OK(())
+    #[test]
+    fn test_aggregate_n_signals() -> Result<()> {
+        Ok(())
     }
 }

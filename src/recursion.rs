@@ -90,7 +90,8 @@ impl AccessSet {
         let mut proof_targets = Vec::new();
         let mut nullifiers = Vec::new();
 
-        for (topic, signal) in topics.iter().zip(signals.iter()) {
+        // todo: how to loop through 2 vectors at the same time and "with ownership"
+        for (topic, signal) in topics.into_iter().zip(signals.into_iter()) {
             let public_inputs: Vec<F> = self
                 .0
                 .cap
@@ -122,7 +123,7 @@ impl AccessSet {
             &verifier_data.verifier_only.constants_sigmas_cap,
         );
 
-        for proof_target in proof_targets.iter() {
+        for proof_target in proof_targets {
             builder.verify_proof(proof_target, &vd_target, &verifier_data.common);
         }
 
