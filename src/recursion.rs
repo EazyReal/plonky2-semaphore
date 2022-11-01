@@ -95,10 +95,7 @@ impl AccessSet {
         let mut nullifiers = Vec::new();
 
         // todo: how to loop through 2 vectors at the same time and "with ownership"
-        let mut i = 0;
         for (topic, signal) in topics.into_iter().zip(signals.into_iter()) {
-            println!("{}, {:?}", i, topic);
-            i += 1;
             let public_inputs: Vec<F> = self
                 .0
                 .cap
@@ -108,9 +105,8 @@ impl AccessSet {
                 .chain(signal.nullifier)
                 .chain(topic)
                 .collect();
+            // maybe the verifer_data is not same for all...
             let proof_target = builder.add_virtual_proof_with_pis(&verifier_data.common);
-            println!("pi_t len: {}", proof_target.public_inputs.len());
-            println!("pi len: {}", public_inputs.len());
             pw.set_proof_with_pis_target(
                 &proof_target,
                 &ProofWithPublicInputs {
