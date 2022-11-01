@@ -108,7 +108,9 @@ impl AccessSet {
                 .chain(signal.nullifier)
                 .chain(topic)
                 .collect();
+            println!("pi len: {}", public_inputs.len());
             let proof_target = builder.add_virtual_proof_with_pis(&verifier_data.common);
+            println!("pi_t len: {}", proof_target.public_inputs.len());
             pw.set_proof_with_pis_target(
                 &proof_target,
                 &ProofWithPublicInputs {
