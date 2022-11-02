@@ -31,5 +31,5 @@ RUST_BACKTRACE=1 cargo run --release --example aggregate_n -- -vv
 
 ## Known 
 - zipeq is ok (the benchmark works)
-- vd s are the same (by Derived Eq), see commit <>
+- vd s are the same (by Derived Eq), see commit 397d7fe
 - vd0 can be used as vd1's verifying key, see commit 9d21005
