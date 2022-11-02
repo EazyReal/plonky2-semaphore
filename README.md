@@ -30,7 +30,7 @@ RUST_BACKTRACE=1 cargo run --release --example aggregate_n -- -vv
 - 1
   - check verifying data is same
   - test vd0 as vd1's verifying key
-    - works, can verify, see 
+    - works, can verify, see commit 9d21005
 - 2
   - test if use vds instead of vd to aggregate_n can work
 - 3 
