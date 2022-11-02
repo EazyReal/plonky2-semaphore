@@ -25,13 +25,11 @@ RUST_BACKTRACE=1 cargo run --release --example aggregate_n -- -vv
     ```
 
 ## Test
-- recursive proof 1 proof (check if same)
-- zip target and pi (final)
-- 1
-  - check verifying data is same
-  - test vd0 as vd1's verifying key
-    - works, can verify, see commit 9d21005
-- 2
-  - test if use vds instead of vd to aggregate_n can work
-- 3 
-  - what if standard config is not suitable for recursion in small-sized circuit
+- test if use vds instead of vd to aggregate_n can work
+- fu: what if standard config is not suitable for recursion in small-sized circuit
+  - recursive proof 1 proof (check if same)
+
+## Known 
+- zipeq is ok (the benchmark works)
+- vd s are the same (by Derived Eq), see commit <>
+- vd0 can be used as vd1's verifying key, see commit 9d21005

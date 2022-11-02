@@ -48,12 +48,14 @@ fn main() -> Result<()> {
     let (_, vd) = access_set.make_signal(private_keys[1 << 19], F::rand_arr(), 1 << 19)?;
     for i in 0..10 {
         let topic = F::rand_arr();
-        let (signal, _) = access_set.make_signal(private_keys[i], topic, i)?;
+        let (signal, vdi) = access_set.make_signal(private_keys[i], topic, i)?;
         topics.push(topic);
         signals.push(signal);
+        assert_eq!(vd, vdi);
     }
+    println!("before aggregate_n_signals");
     let (_, recursive_proof) = access_set.aggregate_n_signals(topics, signals, &vd);
     let proof_len = recursive_proof.to_bytes()?.len();
-    println!("the proof len is: {}", proof_len);
+    println!("{}", proof_len);
     Ok(())
 }
