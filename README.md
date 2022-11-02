@@ -24,4 +24,11 @@ RUST_BACKTRACE=1 cargo run --release --example aggregate_n -- -vv
     note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
     ```
 
-
+## Test
+- recursive proof 1 proof (check if same)
+- zip target and pi (final)
+- 1
+  - check verifying data is same
+  - test vd0 as vd1's verifying key
+- 2
+  - test if use vds instead of vd to aggregate_n can work

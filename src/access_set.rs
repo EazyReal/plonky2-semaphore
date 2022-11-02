@@ -46,9 +46,9 @@ impl AccessSet {
         let mut pw = PartialWitness::new();
 
         let targets = self.semaphore_circuit(&mut builder);
+        let data = builder.build();
         self.fill_semaphore_targets(&mut pw, private_key, topic, public_key_index, targets);
 
-        let data = builder.build();
         let proof = data.prove(pw)?;
 
         Ok((

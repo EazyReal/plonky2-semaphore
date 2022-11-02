@@ -6,7 +6,7 @@
 #![feature(generic_const_exprs)]
 
 use plonky2::field::goldilocks_field::GoldilocksField;
-use plonky2::plonk::circuit_data::VerifierCircuitData;
+//use plonky2::plonk::circuit_data::VerifierCircuitData;
 use plonky2::plonk::config::PoseidonGoldilocksConfig;
 use plonky2::plonk::proof::Proof;
 
@@ -54,6 +54,6 @@ fn main() -> Result<()> {
     }
     let (_, recursive_proof) = access_set.aggregate_n_signals(topics, signals, &vd);
     let proof_len = recursive_proof.to_bytes()?.len();
-    println!("{}", proof_len);
+    println!("the proof len is: {}", proof_len);
     Ok(())
 }
