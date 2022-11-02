@@ -30,5 +30,8 @@ RUST_BACKTRACE=1 cargo run --release --example aggregate_n -- -vv
 - 1
   - check verifying data is same
   - test vd0 as vd1's verifying key
+    - works, can verify, see 
 - 2
   - test if use vds instead of vd to aggregate_n can work
+- 3 
+  - what if standard config is not suitable for recursion in small-sized circuit

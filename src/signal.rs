@@ -39,10 +39,15 @@ mod tests {
         let access_set = AccessSet(MerkleTree::new(public_keys, 0));
 
         let i = 12;
+        //test 3
+        let j = 1 << 19;
         let topic = F::rand_arr();
+        // test 3
+        let topic2 = F::rand_arr();
+        let (signal2, vd2) = access_set.make_signal(private_keys[j], topic2, j)?;
 
         let (signal, vd) = access_set.make_signal(private_keys[i], topic, i)?;
-        access_set.verify_signal(topic, signal, &vd)
+        access_set.verify_signal(topic, signal, &vd2)
     }
 
     #[test]
