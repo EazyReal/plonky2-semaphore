@@ -17,7 +17,9 @@ impl AccessSet {
         signal: Signal,
         verifier_data: &VerifierCircuitData<F, C, 2>,
     ) -> (Digest, ProofWithPublicInputs<F, C, 2>) {
-        let config = CircuitConfig::standard_recursion_zk_config();
+        //let config = CircuitConfig::standard_recursion_zk_config();
+        println!("recursive_proof use config from verifier data.");
+        let config = verifier_data.common.config.clone();
         let mut builder = CircuitBuilder::new(config);
         let mut pw = PartialWitness::new();
 
@@ -68,7 +70,7 @@ impl AccessSet {
         verifier_data: &VerifierCircuitData<F, C, 2>,
     ) -> (Digest, Digest, PlonkyProof) {
         let config = CircuitConfig::standard_recursion_zk_config();
-        let mut builder = CircuitBuilder::new(config);
+        let mut builder = CircuitBuilder::new(config.clone());
         let mut pw = PartialWitness::new();
 
         let public_inputs0: Vec<F> = self
@@ -134,7 +136,7 @@ impl AccessSet {
         verifier_data: &VerifierCircuitData<F, C, 2>,
     ) -> (Vec<Digest>, ProofWithPublicInputs<F, C, 2>) {
         let config = CircuitConfig::standard_recursion_zk_config();
-        let mut builder = CircuitBuilder::new(config);
+        let mut builder = CircuitBuilder::new(config.clone());
         let mut pw = PartialWitness::new();
         let n1 = topics.len();
         let n2 = signals.len();
