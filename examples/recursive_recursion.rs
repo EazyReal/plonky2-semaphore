@@ -6,7 +6,7 @@
 #![feature(generic_const_exprs)]
 
 use plonky2::field::goldilocks_field::GoldilocksField;
-use plonky2::plonk::circuit_data::VerifierCircuitData;
+//use plonky2::plonk::circuit_data::VerifierCircuitData;
 use plonky2::plonk::config::PoseidonGoldilocksConfig;
 use plonky2::plonk::proof::Proof;
 

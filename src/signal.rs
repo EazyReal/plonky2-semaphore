@@ -44,9 +44,9 @@ mod tests {
         let topic = F::rand_arr();
         // test 3
         let topic2 = F::rand_arr();
-        let (signal2, vd2) = access_set.make_signal(private_keys[j], topic2, j)?;
+        let (_, vd2) = access_set.make_signal(private_keys[j], topic2, j)?;
 
-        let (signal, vd) = access_set.make_signal(private_keys[i], topic, i)?;
+        let (signal, _) = access_set.make_signal(private_keys[i], topic, i)?;
         access_set.verify_signal(topic, signal, &vd2)
     }
 

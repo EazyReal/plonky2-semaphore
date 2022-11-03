@@ -1,8 +1,9 @@
-use plonky2::fri::proof;
+//use plonky2::fri::proof;
 use plonky2::iop::witness::{PartialWitness, Witness};
 use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2::plonk::circuit_data::{CircuitConfig, VerifierCircuitData, VerifierCircuitTarget};
-use plonky2::plonk::proof::{ProofWithPublicInputs, ProofWithPublicInputsTarget};
+use plonky2::plonk::proof::ProofWithPublicInputs;
+//use plonky2::plonk::proof::ProofWithPublicInputsTarget;
 
 use crate::access_set::AccessSet;
 use crate::signal::{Digest, PlonkyProof, Signal, C, F};
