@@ -10,6 +10,54 @@ use crate::signal::{Digest, PlonkyProof, Signal, C, F};
 //use itertools::Itertools::zip_eq;
 
 impl AccessSet {
+    pub fn recursive_proof(
+        &self,
+        topic: Digest,
+        signal: Signal,
+        verifier_data: &VerifierCircuitData<F, C, 2>,
+    ) -> (Digest, ProofWithPublicInputs<F, C, 2>) {
+        let config = CircuitConfig::standard_recursion_zk_config();
+        let mut builder = CircuitBuilder::new(config);
+        let mut pw = PartialWitness::new();
+
+        let public_inputs: Vec<F> = self
+            .0
+            .cap
+            .0
+            .iter()
+            .flat_map(|h| h.elements)
+            .chain(signal.nullifier)
+            .chain(topic)
+            .collect();
+
+        let proof_target = builder.add_virtual_proof_with_pis(&verifier_data.common);
+        pw.set_proof_with_pis_target(
+            &proof_target,
+            &ProofWithPublicInputs {
+                proof: signal.proof,
+                public_inputs: public_inputs,
+            },
+        );
+
+        let vd_target = VerifierCircuitTarget {
+            constants_sigmas_cap: builder
+                .add_virtual_cap(verifier_data.common.config.fri_config.cap_height),
+        };
+        pw.set_cap_target(
+            &vd_target.constants_sigmas_cap,
+            &verifier_data.verifier_only.constants_sigmas_cap,
+        );
+
+        builder.verify_proof(proof_target, &vd_target, &verifier_data.common);
+
+        let data = builder.build();
+        let recursive_proof = data.prove(pw).unwrap();
+
+        data.verify(recursive_proof.clone()).unwrap();
+
+        (signal.nullifier, recursive_proof)
+    }
+
     pub fn aggregate_signals(
         &self,
         topic0: Digest,
