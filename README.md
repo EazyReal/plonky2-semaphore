@@ -2,6 +2,17 @@
 
 Used as an example in the ZKHack Plonky2 presentation.
 
+- recursive should not use merkle path optimization (for its a circuit)
+
+## TODO
+- see how fri (recursive verifier's fri) is implemented
+  - i.e. find why `at.0` and `a.0` have different lengths.
+- open an issue on plonky2_semaphore 
+- report
+  - recursive SNARKs condition (preprocessing and aggregatable), 10 min
+  - preprocessing recursive SNARK by picture, 5 min
+  - preprocessing recursive SNARK bycode (benchrecursion or this) 20 min
+
 ## Compilation
 ```bash
 rustup override set nightly # Requires nightly Rust

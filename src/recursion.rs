@@ -17,9 +17,9 @@ impl AccessSet {
         signal: Signal,
         verifier_data: &VerifierCircuitData<F, C, 2>,
     ) -> (Digest, ProofWithPublicInputs<F, C, 2>) {
-        //let config = CircuitConfig::standard_recursion_zk_config();
-        println!("recursive_proof use config from verifier data.");
-        let config = verifier_data.common.config.clone();
+        let config = CircuitConfig::standard_recursion_zk_config();
+        // println!("recursive_proof use config from verifier data.");
+        // let config = verifier_data.common.config.clone();
         let mut builder = CircuitBuilder::new(config);
         let mut pw = PartialWitness::new();
 
